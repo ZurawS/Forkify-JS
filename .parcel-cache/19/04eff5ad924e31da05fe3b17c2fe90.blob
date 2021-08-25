@@ -1,0 +1,32 @@
+var _modelJs = require('./model.js');
+var _viewsRecipeViewJs = require('./views/recipeView.js');
+var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
+var _viewsRecipeViewJsDefault = _parcelHelpers.interopDefault(_viewsRecipeViewJs);
+require('./views/searchView.js');
+var _viewsResultsViewJs = require('./views/resultsView.js');
+var _viewsResultsViewJsDefault = _parcelHelpers.interopDefault(_viewsResultsViewJs);
+require('./views/paginationView.js');
+var _viewsBookmarksViewJs = require('./views/bookmarksView.js');
+var _viewsBookmarksViewJsDefault = _parcelHelpers.interopDefault(_viewsBookmarksViewJs);
+require('./views/addRecipeView.js');
+require('core-js/stable');
+require('regenerator-runtime/runtime');
+require('regenerator-runtime');
+const controlRecipes = async function () {
+  try {
+    const id = window.location.hash.slice(1);
+    if (!id) return;
+    _viewsRecipeViewJsDefault.default.renderSpinner();
+    // 0) Update results view to mark selected search result
+    _viewsResultsViewJsDefault.default.update(_modelJs.getSearchResultsPage());
+    // 1) Updating bookmarks view
+    _viewsBookmarksViewJsDefault.default.update(_modelJs.state.bookmarks);
+    // 2) Loading recipe
+    await _modelJs.loadRecipe(id);
+    // 3) Rendering recipe
+    _viewsRecipeViewJsDefault.default.render(_modelJs.state.recipe);
+  } catch (err) {
+    _viewsRecipeViewJsDefault.default.renderError();
+    console.error(err);
+  }
+};
