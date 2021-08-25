@@ -1,20 +1,25 @@
 {
-  "name": "forkify_demo",
+  "name": "forkify",
   "version": "1.0.0",
-  "description": "Recipe application JS course",
+  "description": "JS course project",
   "main": "index.html",
+  "dependencies": {
+    "fsevents": "^2.3.2",
+    "parcel": "^2.0.0-beta.2"
+  },
+  "devDependencies": {},
   "scripts": {
     "start": "parcel index.html",
     "build": "parcel build index.html"
   },
-  "author": "Paweł Żurawski",
-  "license": "ISC",
-  "devDependencies": {
-    "@parcel/transformer-sass": "^2.0.0-beta.2",
-    "parcel": "^2.0.0-beta.2"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZurawS/Forkify-JS.git"
   },
-  "dependencies": {
-    "core-js": "^3.10.0",
-    "regenerator-runtime": "^0.13.7"
-  }
+  "author": "PawelZet",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ZurawS/Forkify-JS/issues"
+  },
+  "homepage": "https://github.com/ZurawS/Forkify-JS#readme"
 }
