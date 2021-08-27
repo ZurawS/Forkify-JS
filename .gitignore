@@ -1,2 +1,4 @@
 node_modules
 .parcel-cache
+.parcel-cache/data.mdb
+.parcel-cache/cc001662b4fa88d5.txt
