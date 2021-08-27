@@ -479,8 +479,9 @@ const controlRecipes = async function() {
         const id = window.location.hash.slice(1);
         if (!id) return;
         _recipeViewJsDefault.default.renderSpinner();
-        //Update results and bookmarks view to mark selected search result
+        //Update results view to mark selected search result
         _resultsViewJsDefault.default.update(_modelJs.getSearchResultsPage());
+        //Updating boookmarks view
         _bookmarksViewJsDefault.default.update(_modelJs.state.bookmarks);
         //Loading recipe
         await _modelJs.loadRecipe(id);
@@ -528,7 +529,11 @@ const controlAddBookmark = function() {
     //Render bookmarks
     _bookmarksViewJsDefault.default.render(_modelJs.state.bookmarks);
 };
+const controlBookmarks = function() {
+    _bookmarksViewJsDefault.default.render(_modelJs.state.bookmarks);
+};
 const init = function() {
+    _bookmarksViewJsDefault.default.addHandlerRender(controlBookmarks);
     _recipeViewJsDefault.default.addHandlerRender(controlRecipes);
     _recipeViewJsDefault.default.addHandlerUpdateServings(controlServings);
     _recipeViewJsDefault.default.addHandlerAddBookmark(controlAddBookmark);
@@ -536,6 +541,10 @@ const init = function() {
     _paginationViewJsDefault.default.addHandlerClick(controlPagination);
 };
 init();
+//Fast clear all bookmarks for debugging (comment init first)
+const clearBookmarks = function() {
+    localStorage.clear('bookmarks');
+}; // clearBookmarks();
 
 },{"core-js/stable":"eIyVg","regenerator-runtime/runtime":"cH8Iq","./model.js":"6Yfb5","./views/recipeView.js":"9q0mt","./views/searchView.js":"51HTZ","./views/resultsView.js":"a6WEO","./views/paginationView.js":"c2v8w","@parcel/transformer-js/src/esmodule-helpers.js":"JacNc","./views/bookmarksView.js":"cUfi0"}],"eIyVg":[function(require,module,exports) {
 require('../modules/es.symbol');
@@ -12888,11 +12897,15 @@ const updateServings = function(newServings) {
     });
     state.recipe.servings = newServings;
 };
+const persistBookmarks = function() {
+    localStorage.setItem('bookmarks', JSON.stringify(state.bookmarks));
+};
 const addBookmark = function(recipe) {
     //Add bookmark
     state.bookmarks.push(recipe);
     //Mark current recipe as bookmarked
     if (recipe.id === state.recipe.id) state.recipe.bookmarked = true;
+    persistBookmarks();
 };
 const deleteBookmark = function(id) {
     //Delete bookmark
@@ -12901,7 +12914,14 @@ const deleteBookmark = function(id) {
     state.bookmarks.splice(index, 1);
     //Mark current recipe as NOT bookmarked
     if (id === state.recipe.id) state.recipe.bookmarked = false;
+    persistBookmarks();
 };
+const init = function() {
+    const storage = localStorage.getItem('bookmarks');
+    if (storage) state.bookmarks = JSON.parse(storage);
+};
+init();
+console.log(state.bookmarks);
 
 },{"regenerator-runtime":"cH8Iq","./config":"beA2m","./helpers":"9l3Yy","@parcel/transformer-js/src/esmodule-helpers.js":"JacNc"}],"beA2m":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -13472,6 +13492,9 @@ class BookmarksView extends _viewDefault.default {
     _parentElement = document.querySelector('.bookmarks__list');
     _errorMessage = `No bookmarks yet. Find a nice recipe and bookmark it ;)`;
     _message = ``;
+    addHandlerRender(handler) {
+        window.addEventListener('load', handler);
+    }
     _generateMarkup() {
         return this._data.map((bookmark)=>_previewViewDefault.default.render(bookmark, false)
         ).join('');
