@@ -2,7 +2,7 @@
   "name": "forkify",
   "version": "1.0.0",
   "description": "JS course project",
-  "main": "index.js",
+  "default": "index.html",
   "dependencies": {
     "core-js": "^3.16.3",
     "fractional": "^1.0.0",
@@ -16,7 +16,7 @@
   },
   "scripts": {
     "start": "parcel index.html",
-    "build": "parcel build index.js"
+    "build": "parcel build index.html --dist-dir ./dist"
   },
   "repository": {
     "type": "git",
